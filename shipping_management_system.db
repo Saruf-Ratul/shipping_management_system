@@ -1,0 +1,42 @@
+CREATE TABLE Users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role ENUM('Admin', 'User') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    order_number VARCHAR(10) UNIQUE,
+    sender_address VARCHAR(255) NOT NULL,
+    recipient_address VARCHAR(255) NOT NULL,
+    status ENUM('Created', 'Shipped', 'Voided') NOT NULL,
+    label_id INT, -- Foreign Key referencing Labels table
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+CREATE TABLE Labels (
+    label_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT UNIQUE, -- Foreign Key referencing Orders table
+    label_type VARCHAR(10) NOT NULL,
+    label_url VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
+);
+CREATE TABLE Shipments (
+    shipment_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT UNIQUE, -- Foreign Key referencing Orders table
+    carrier VARCHAR(50) NOT NULL,
+    tracking_number VARCHAR(50) UNIQUE NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
+);
+CREATE TABLE Settings (
+    setting_id INT AUTO_INCREMENT PRIMARY KEY,
+    setting_name VARCHAR(50) UNIQUE NOT NULL,
+    setting_value VARCHAR(255) NOT NULL
+);

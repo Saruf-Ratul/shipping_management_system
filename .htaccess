@@ -1,0 +1,11 @@
+# RewriteEngine On
+# RewriteBase /
+
+# # Rewrite rule for API endpoints
+# RewriteRule ^api/([^/]+)/?$ api/index.php?action=$1 [L,QSA]
+
+# # Rewrite rule for admin pages
+# RewriteRule ^admin/([^/]+)/?$ admin/$1.php [L,QSA]
+
+# # Rewrite rule for non-admin pages
+# RewriteRule ^([^/]+)/?$ $1.php [L,QSA]
